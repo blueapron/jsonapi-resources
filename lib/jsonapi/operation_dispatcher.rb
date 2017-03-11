@@ -54,9 +54,9 @@ module JSONAPI
     end
 
     def process_operation(operation)
-      with_default_handling do 
+      with_default_handling do
         operation.process
-      end        
+      end
     end
 
     def with_default_handling(&block)
@@ -71,12 +71,12 @@ module JSONAPI
 
         internal_server_error = JSONAPI::Exceptions::InternalServerError.new(e)
         Rails.logger.error { "Internal Server Error: #{e.message} #{e.backtrace.join("\n")}" }
-        return JSONAPI::ErrorsOperationResult.new(internal_server_error.errors[0].code, internal_server_error.errors)
+        return JSONAPI::ErrorsOperationResult.new(internal_server_error.errors[0].code, internal_server_error.errors, exception: e)
       end
     end
 
     def safe_run_callback(callback, error)
-      begin 
+      begin
         callback.call(error)
       rescue => e
         Rails.logger.error { "Error in error handling callback: #{e.message} #{e.backtrace.join("\n")}" }
