@@ -15,9 +15,11 @@ module JSONAPI
 
   class ErrorsOperationResult < OperationResult
     attr_accessor :errors
+    attr_accessor :exception
 
     def initialize(code, errors, options = {})
       @errors = errors
+      @exception = options.fetch(:exception, nil)
       super(code, options)
     end
   end

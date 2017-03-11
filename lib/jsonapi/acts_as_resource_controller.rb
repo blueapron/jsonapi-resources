@@ -197,6 +197,10 @@ module JSONAPI
     end
 
     def render_results(operation_results)
+      # Store exceptions
+      error = operation_results&.results&.find { |e| e.code == '500' }
+      request.env['action_dispatch.exception'] ||= error.exception if error
+
       response_doc = create_response_document(operation_results)
 
       render_options = {
