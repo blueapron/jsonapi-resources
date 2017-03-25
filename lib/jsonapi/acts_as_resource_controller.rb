@@ -61,8 +61,7 @@ module JSONAPI
     end
 
     def process_request_and_render(action)
-      process_request
-      render_response_document
+      render(process_request)
     end
 
     def process_request
@@ -110,6 +109,7 @@ module JSONAPI
           end
         end
       end
+      finalize_response_document
     end
 
     def run_in_transaction(transactional)
@@ -237,7 +237,7 @@ module JSONAPI
       {}
     end
 
-    def render_response_document
+    def finalize_response_document
       content = response_document.contents
 
       render_options = {}
@@ -255,7 +255,7 @@ module JSONAPI
       response.status = response_document.status
       response.headers['Content-Type'] = JSONAPI::MEDIA_TYPE
 
-      render(render_options)
+      render_options
     end
 
     def create_response_document
