@@ -17,56 +17,58 @@ module JSONAPI
     attr_reader :response_document
 
     def index
-      process_request
+      process_request_and_render(__method__)
     end
 
     def show
-      process_request
+      process_request_and_render(__method__)
     end
 
     def show_relationship
-      process_request
+      process_request_and_render(__method__)
     end
 
     def create
-      process_request
+      process_request_and_render(__method__)
     end
 
     def create_relationship
-      process_request
+      process_request_and_render(__method__)
     end
 
     def update_relationship
-      process_request
+      process_request_and_render(__method__)
     end
 
     def update
-      process_request
+      process_request_and_render(__method__)
     end
 
     def destroy
-      process_request
+      process_request_and_render(__method__)
     end
 
     def destroy_relationship
-      process_request
+      process_request_and_render(__method__)
     end
 
     def get_related_resource
-      process_request
+      process_request_and_render(__method__)
     end
 
     def get_related_resources
+      process_request_and_render(__method__)
+    end
+
+    def process_request_and_render(action)
       process_request
+      render_response_document
     end
 
     def process_request
       @response_document = create_response_document
 
-      unless verify_content_type_header && verify_accept_header
-        render_response_document
-        return
-      end
+      return unless verify_content_type_header && verify_accept_header
 
       request_parser = JSONAPI::RequestParser.new(
           params,
@@ -108,7 +110,6 @@ module JSONAPI
           end
         end
       end
-      render_response_document
     end
 
     def run_in_transaction(transactional)
